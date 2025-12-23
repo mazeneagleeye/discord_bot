@@ -7,9 +7,10 @@ BOT_DIR="${BOT_DIR:-clanwar-bot}"
 echo "Starting bot in '$BOT_DIR'..."
 cd "$BOT_DIR" || { echo "Directory not found: $BOT_DIR"; exit 1; }
 
-# Install dependencies (production only in CI environment) and start
+# Install dependencies (omit dev deps in production) and start
 echo "Installing dependencies..."
-npm install --production
+# Use --omit=dev to avoid npm production deprecation warnings
+npm install --omit=dev --no-audit
 
 echo "Running npm start (fallback to node index.js if needed)..."
 npm start || node index.js

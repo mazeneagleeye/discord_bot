@@ -4,6 +4,18 @@ This repo is a monorepo with multiple bots in subfolders. I added a root `start.
 
 How it works
 - `BOT_DIR` environment variable chooses the subfolder to run (e.g., `clanwar-bot`, `discord-ai-bot`, `new generate`).
+
+- Each bot looks for its token in either a local `config.json` (not committed) or the environment variable `DISCORD_TOKEN`. In Railway you should set `DISCORD_TOKEN` in the project environment variables (preferred). I added `clanwar-bot/config.example.json` as a template you can use locally.
+
+Environment variables checklist (common):
+- `DISCORD_TOKEN` (required for every bot in Railway)
+- `CLIENT_ID` (for command registration; used by `new generate` and optional elsewhere)
+- `GUILD_ID` (optional - quicker command registration to a test guild)
+- `OPENAI_API_KEY` (required by `discord-ai-bot`)
+- `REGISTER_SECRET` (optional - used by `new generate` to trigger registration endpoint)
+- `PORT` (optional - `new generate` health server uses `PORT` or 3000)
+
+Ensure you set these in Railway → Project → Variables, then redeploy.
 - Default `BOT_DIR` is `clanwar-bot` (you can change this in Railway service settings).
 - Root `package.json` runs `bash ./start.sh` which:
   - cd into the `BOT_DIR`
