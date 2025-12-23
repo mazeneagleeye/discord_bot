@@ -76,3 +76,6 @@ process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('unhandledRejection', (r)=>console.error('Unhandled Rejection:', r));
 process.on('uncaughtException', (e)=>{ console.error('Uncaught Exception:', e); process.exit(1); });
+
+setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 5 * 60 * 1000);
+process.on('exit', (code) => console.log(`🔚 Process exiting with code ${code} PID:${process.pid}`));
