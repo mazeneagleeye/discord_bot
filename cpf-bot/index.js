@@ -43,6 +43,11 @@ client.on("messageCreate", (message) => {
   }
 });
 
-console.log("🔑 Logging in with token:", process.env.TOKEN ? "Found ✅" : "Missing ❌");
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN || process.env.TOKEN;
+console.log("🔑 Logging in with token:", DISCORD_TOKEN ? "Found ✅" : "Missing ❌");
 
-client.login(process.env.TOKEN);
+if (!DISCORD_TOKEN) {
+  console.error("❌ No DISCORD_TOKEN found. Set DISCORD_TOKEN env var in Railway or a local .env for testing.");
+  process.exit(1);
+}
+client.login(DISCORD_TOKEN);
