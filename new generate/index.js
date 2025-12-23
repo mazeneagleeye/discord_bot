@@ -297,6 +297,9 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
+setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 5 * 60 * 1000);
+process.on('exit', (code) => console.log(`🔚 Process exiting with code ${code} PID:${process.pid}`));
+
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
