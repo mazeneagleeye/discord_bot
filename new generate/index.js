@@ -217,9 +217,10 @@ client.once("clientReady", async () => {
 });
 
 // --- Railway / PaaS helpers ---
-// Ensure TOKEN is set via environment (Railway provides project variables)
-if (!process.env.TOKEN) {
-  console.error('❌ Missing TOKEN in environment. Set TOKEN in Railway secrets or in your .env (do NOT commit it).');
+// Ensure DISCORD_TOKEN (or TOKEN) is set via environment (Railway provides project variables)
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN || process.env.TOKEN;
+if (!DISCORD_TOKEN) {
+  console.error('❌ Missing DISCORD_TOKEN in environment. Set DISCORD_TOKEN in Railway secrets or in your .env (do NOT commit it).');
   process.exit(1);
 }
 
