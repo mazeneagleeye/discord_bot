@@ -12,5 +12,6 @@ echo "Installing dependencies..."
 # Use --omit=dev to avoid npm production deprecation warnings
 npm install --omit=dev --no-audit
 
-echo "Running npm start (fallback to node index.js if needed)..."
-npm start || node index.js
+echo "Running npm start (this will replace the shell so signals are forwarded)..."
+# Use exec so npm becomes PID 1 in the container and receives signals from Railway
+exec npm start

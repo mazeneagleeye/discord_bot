@@ -13,9 +13,9 @@ Environment variables checklist (common):
 - `GUILD_ID` (optional - quicker command registration to a test guild)
 - `OPENAI_API_KEY` (required by `discord-ai-bot`)
 - `REGISTER_SECRET` (optional - used by `new generate` to trigger registration endpoint)
-- `PORT` (optional - `new generate` health server uses `PORT` or 3000)
+- `PORT` (optional - most bots expose a health endpoint on `PORT` or 3000)
 
-Ensure you set these in Railway → Project → Variables, then redeploy.
+Ensure you set these in Railway → Project → Variables, then redeploy. Make sure the service exposes a health endpoint (GET /health returns 200); I added lightweight servers to all bots so Railway can verify the app is healthy and keep the container running.
 - Default `BOT_DIR` is `clanwar-bot` (you can change this in Railway service settings).
 - Root `package.json` runs `bash ./start.sh` which:
   - cd into the `BOT_DIR`
