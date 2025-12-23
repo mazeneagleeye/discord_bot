@@ -1,6 +1,23 @@
 const { REST, Routes } = require("discord.js");
-const { clientId, guildId, token } = require("./config.json");
 const fs = require("fs");
+
+// Prefer environment variables (Railway); fall back to local config.json if present
+let clientId = process.env.CLIENT_ID;
+let guildId = process.env.GUILD_ID;
+let token = process.env.DISCORD_TOKEN || process.env.TOKEN;
+try {
+  const cfg = require("./config.json");
+  clientId = clientId || cfg.clientId;
+  guildId = guildId || cfg.guildId;
+  token = token || cfg.token;
+} catch (e) {
+  // no config.json, continue
+}
+
+if (!clientId || !token) {
+  console.error("Missing CLIENT_ID or DISCORD_TOKEN. Set env vars or add a local config.json (use config.example.json as template).");
+  process.exit(1);
+}
 
 const commands = [];
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
