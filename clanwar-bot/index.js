@@ -83,3 +83,7 @@ process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
   process.exit(1);
 });
+
+// Helpful diagnostics for PaaS (Railway) — heartbeat and exit logs
+setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 5 * 60 * 1000);
+process.on('exit', (code) => console.log(`🔚 Process exiting with code ${code} PID:${process.pid}`));
