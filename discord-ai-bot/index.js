@@ -1,7 +1,7 @@
-
-require('dotenv').config();
 const { Client, GatewayIntentBits } = require("discord.js");
-const OpenAI = require("openai");
+require("dotenv").config();
+
+console.log("🚀 Starting bot..."); // <-- debug log
 
 const client = new Client({
   intents: [
@@ -11,58 +11,43 @@ const client = new Client({
   ],
 });
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // your OpenAI key
-});
-
-// Helper: chance for rare random messages (e.g. 2%)
-function randomChance(percent) {
-  return Math.random() < percent / 100;
-}
-
-client.on("messageCreate", async (message) => {
-  if (message.author.bot) return;
-
-  const mentionedBot = message.mentions.has(client.user);
-  const repliedToBot = message.reference
-    ? (await message.fetchReference()).author.id === client.user.id
-    : false;
-
-  // 1. If bot is mentioned OR someone replies to bot
-  if (mentionedBot || repliedToBot) {
-    try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: message.content }],
-      });
-
-      const reply = response.choices[0].message.content;
-      await message.reply(reply);
-    } catch (err) {
-      console.error(err);
-      await message.reply("🤖 Oops, I couldn't think of a reply.");
-    }
-  }
-
-  // 2. Rare chance to send random message
-  if (randomChance(2)) { // 2% chance
-    try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: "Say something random and fun." }],
-      });
-
-      const randomMsg = response.choices[0].message.content;
-      await message.channel.send(randomMsg);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-});
-
+const TARGET_POINTS = 3000000; // 3 million
+const PASS_VALUE = 5000;       // every 5000 = 1 clan pass
 
 client.once("ready", () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.on("messageCreate", (message) => {
+  if (message.author.bot) return;
+
+  if (message.content.startsWith("-cpfm8")) {
+    const args = message.content.trim().split(/\s+/);
+    const currentPoints = parseInt(args[1], 10);
+
+    if (isNaN(currentPoints)) {
+      return message.reply("❌ Example: `-cpfm8 1011800`");
+    }
+
+    const remaining = TARGET_POINTS - currentPoints;
+
+    if (remaining <= 0) {
+      return message.reply("🎉 Mission 8 already completed!");
+    }
+
+    const passes = Math.ceil(remaining / PASS_VALUE);
+
+    message.reply(
+      `📊 You need **${remaining.toLocaleString()}** points = **${passes} Clan Passes**`
+    );
+  }
+});
+
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN || process.env.TOKEN;
+console.log("🔑 Logging in with token:", DISCORD_TOKEN ? "Found ✅" : "Missing ❌");
+
+if (!DISCORD_TOKEN) {
+  console.error("❌ No DISCORD_TOKEN found. Set DISCORD_TOKEN env var in Railway or a local .env for testing.");
+  process.exit(1);
+}
+client.login(DISCORD_TOKEN);
