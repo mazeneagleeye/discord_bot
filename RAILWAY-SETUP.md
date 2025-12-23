@@ -16,6 +16,16 @@ Environment variables checklist (common):
 - `PORT` (optional - most bots expose a health endpoint on `PORT` or 3000)
 
 Ensure you set these in Railway → Project → Variables, then redeploy. Make sure the service exposes a health endpoint (GET /health returns 200); I added lightweight servers to all bots so Railway can verify the app is healthy and keep the container running.
+
+Troubleshooting `Stopping Container` events
+- If the logs show `Stopping Container` after a successful start, check these:
+  1. Service type must be **Web** (not Task/Function) so Railway keeps it running and exposes a port.
+  2. Health check path should be `/health` and initial timeout set to 30–60s. If the first health check times out, the service may be stopped.
+  3. Inspect deploy logs right after `Stopping Container` for an exit code, OOM, or SIGTERM that points to why it stopped.
+  4. Ensure the service's `PORT` is respected (do not hardcode port 8080) — the software uses `process.env.PORT || 3000`.
+  5. Resource limits (memory) may cause OOM kills — check Railway's resource limits and logs for 'OOM' entries.
+
+If you share the exact log lines around when it stops (the lines right before or after `Stopping Container`), I can diagnose the cause and propose a fix.
 - Default `BOT_DIR` is `clanwar-bot` (you can change this in Railway service settings).
 - Root `package.json` runs `bash ./start.sh` which:
   - cd into the `BOT_DIR`
