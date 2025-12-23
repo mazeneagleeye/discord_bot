@@ -1,7 +1,15 @@
 const fs = require("fs");
 const path = require("path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
-const { token } = require("./config.json");
+
+// Load token from config.json if present, otherwise fall back to environment variables (Railway uses env vars)
+let token;
+try {
+  const cfg = require("./config.json");
+  token = cfg.token;
+} catch (e) {
+  token = process.env.DISCORD_TOKEN || process.env.TOKEN;
+}
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -32,5 +40,10 @@ client.on("interactionCreate", async interaction => {
     await interaction.reply({ content: "❌ Error executing command.", ephemeral: true });
   }
 });
+
+if (!token) {
+  console.error("❌ No bot token found. Set DISCORD_TOKEN env var in Railway or add a local 'clanwar-bot/config.json' (use 'config.example.json').");
+  process.exit(1);
+}
 
 client.login(token);
