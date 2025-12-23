@@ -30,4 +30,9 @@ client.once('ready', () => {
     console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
-client.login(process.env.TOKEN);
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN || process.env.TOKEN;
+if (!DISCORD_TOKEN) {
+  console.error("❌ No DISCORD_TOKEN found. Set DISCORD_TOKEN in Railway environment variables.");
+  process.exit(1);
+}
+client.login(DISCORD_TOKEN);
