@@ -84,6 +84,8 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-// Helpful diagnostics for PaaS (Railway) — heartbeat and exit logs
-setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 5 * 60 * 1000);
+// Helpful diagnostics for PaaS (Railway) — immediate heartbeat, frequent heartbeats, and exit logs
+console.log(`💓 initial heartbeat: ${new Date().toISOString()} PID:${process.pid} BOT_DIR:${process.env.BOT_DIR||'N/A'} PORT:${process.env.PORT||'N/A'} TOKEN:${process.env.DISCORD_TOKEN||process.env.TOKEN? 'present':'missing'}`);
+setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 30 * 1000);
+process.on('beforeExit', (code) => console.log(`🧾 beforeExit with code ${code} PID:${process.pid}`));
 process.on('exit', (code) => console.log(`🔚 Process exiting with code ${code} PID:${process.pid}`));
