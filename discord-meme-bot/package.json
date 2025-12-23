@@ -1,5 +1,5 @@
 {
-  "name": "discord-meme-bot",
+  "name": "cpf-bot",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "axios": "^1.11.0",
     "discord.js": "^14.22.1",
     "dotenv": "^17.2.2"
   }

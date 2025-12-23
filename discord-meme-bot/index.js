@@ -1,45 +1,53 @@
-import { Client, GatewayIntentBits, Partials } from "discord.js";
-import axios from "axios";
-import dotenv from "dotenv";
-dotenv.config();
+const { Client, GatewayIntentBits } = require("discord.js");
+require("dotenv").config();
+
+console.log("🚀 Starting bot..."); // <-- debug log
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
+    GatewayIntentBits.MessageContent,
   ],
-  partials: [Partials.Channel]
 });
 
-const prefix = "-";
+const TARGET_POINTS = 3000000; // 3 million
+const PASS_VALUE = 5000;       // every 5000 = 1 clan pass
 
-client.on("ready", () => {
+client.once("ready", () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
-client.on("messageCreate", async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+client.on("messageCreate", (message) => {
+  if (message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+  if (message.content.startsWith("-cpfm8")) {
+    const args = message.content.trim().split(/\s+/);
+    const currentPoints = parseInt(args[1], 10);
 
-  if (command === "meme") {
-    try {
-      const res = await axios.get("https://meme-api.com/gimme");
-      const meme = res.data;
-
-      await message.channel.send(
-        `😂 **${meme.title}**\n${meme.url}`
-      );
-    } catch (err) {
-      console.error(err);
-      message.channel.send("⚠ Couldn't fetch a meme right now!");
+    if (isNaN(currentPoints)) {
+      return message.reply("❌ Example: `-cpfm8 1011800`");
     }
+
+    const remaining = TARGET_POINTS - currentPoints;
+
+    if (remaining <= 0) {
+      return message.reply("🎉 Mission 8 already completed!");
+    }
+
+    const passes = Math.ceil(remaining / PASS_VALUE);
+
+    message.reply(
+      `📊 You need **${remaining.toLocaleString()}** points = **${passes} Clan Passes**`
+    );
   }
 });
-if (!process.env.TOKEN) {
-  console.error("❌ Discord bot token not found in environment variables.");
+
+const DISCORD_TOKEN = process.env.DISCORD_TOKEN || process.env.TOKEN;
+console.log("🔑 Logging in with token:", DISCORD_TOKEN ? "Found ✅" : "Missing ❌");
+
+if (!DISCORD_TOKEN) {
+  console.error("❌ No DISCORD_TOKEN found. Set DISCORD_TOKEN env var in Railway or a local .env for testing.");
   process.exit(1);
 }
-client.login(process.env.TOKEN);
+client.login(DISCORD_TOKEN);
