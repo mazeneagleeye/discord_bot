@@ -20,12 +20,17 @@ Ensure you set these in Railway → Project → Variables, then redeploy. Make s
 Troubleshooting `Stopping Container` events
 - If the logs show `Stopping Container` after a successful start, check these:
   1. Service type must be **Web** (not Task/Function) so Railway keeps it running and exposes a port.
-  2. Health check path should be `/health` and initial timeout set to 30–60s. If the first health check times out, the service may be stopped.
-  3. Inspect deploy logs right after `Stopping Container` for an exit code, OOM, or SIGTERM that points to why it stopped.
+  2. Health check path should be `/health` and initial timeout set to 60–120s. If the first health check times out, the service may be stopped.
+  3. Inspect deploy logs right after `Stopping Container` for an exit code, OOM, SIGTERM, or 'Exited with code' that points to why it stopped.
   4. Ensure the service's `PORT` is respected (do not hardcode port 8080) — the software uses `process.env.PORT || 3000`.
   5. Resource limits (memory) may cause OOM kills — check Railway's resource limits and logs for 'OOM' entries.
+  6. Check that the service type in Railway is not configured as a one-off `Task` or `Job` that exits after completion.
 
-If you share the exact log lines around when it stops (the lines right before or after `Stopping Container`), I can diagnose the cause and propose a fix.
+Logging checks to run after deployment:
+- Confirm you see an **initial heartbeat** log within 30s of startup. If you do not, the process likely crashed before or during server startup.
+- If you see frequent heartbeat logs, but the container still stops, look for `beforeExit` or `Process exiting` logs to see the exit code.
+
+If you paste the exact lines from the Railway logs around the `Stopping Container` event (10–20 lines before and after), I will diagnose the exact cause and propose a fix.
 - Default `BOT_DIR` is `clanwar-bot` (you can change this in Railway service settings).
 - Root `package.json` runs `bash ./start.sh` which:
   - cd into the `BOT_DIR`
