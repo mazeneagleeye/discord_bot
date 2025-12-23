@@ -101,5 +101,7 @@ process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('unhandledRejection', (r)=>console.error('Unhandled Rejection:', r));
 process.on('uncaughtException', (e)=>{ console.error('Uncaught Exception:', e); process.exit(1); });
 
-setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 5 * 60 * 1000);
+console.log(`💓 initial heartbeat: ${new Date().toISOString()} PID:${process.pid} BOT_DIR:${process.env.BOT_DIR||'N/A'} PORT:${process.env.PORT||'N/A'} TOKEN:${process.env.DISCORD_TOKEN||process.env.TOKEN? 'present':'missing'} OPENAI:${process.env.OPENAI_API_KEY? 'present':'missing'}`);
+setInterval(() => console.log(`💓 heartbeat: ${new Date().toISOString()} PID:${process.pid}`), 30 * 1000);
+process.on('beforeExit', (code) => console.log(`🧾 beforeExit with code ${code} PID:${process.pid}`));
 process.on('exit', (code) => console.log(`🔚 Process exiting with code ${code} PID:${process.pid}`));
