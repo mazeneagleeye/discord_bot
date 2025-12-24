@@ -4,6 +4,23 @@ This repo is a monorepo with multiple bots in subfolders. I added a root `start.
 
 How it works
 - `BOT_DIR` environment variable chooses the subfolder to run (e.g., `clanwar-bot`, `discord-ai-bot`, `new generate`).
+- The root `package.json` includes per-bot `start:*` scripts which set a unique `PORT` per bot so you can run all bots concurrently in a single Railway service using `npm run start:all`.
+
+Port assignments (used by `npm run start:*`):
+- `clanwar-bot` → **8080**
+- `cpf-bot` → **8081**
+- `discord-ai-bot` → **8082**
+- `discord-meme-bot` → **8083**
+- `new generate` → **8084**
+- `playerprofile` → **8085**
+
+Running all bots in one Railway service (single-service approach)
+- Set the service Start Command to: `npm run start:all`
+- Make sure the service type is **Web** so Railway exposes the container and runs health checks.
+- Ensure the repo root dependencies are installed during the build (so `concurrently` is present); set the Build command to `npm install` or let Railway run the default install step.
+- Note: in single-service mode, all bots run in the same container and share logs and resources. If you prefer isolation or easier scaling, create one Railway service per bot instead.
+
+- Each bot still reads `DISCORD_TOKEN`, `OPENAI_API_KEY`, etc., from Railway environment variables as listed below.
 
 - Each bot looks for its token in either a local `config.json` (not committed) or the environment variable `DISCORD_TOKEN`. In Railway you should set `DISCORD_TOKEN` in the project environment variables (preferred). I added `clanwar-bot/config.example.json` as a template you can use locally.
 
