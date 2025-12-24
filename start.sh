@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Default bot folder. Override in Railway by setting BOT_DIR environment variable.
+# Allow passing directory as the first argument, then fallback to BOT_DIR env var or default to clanwar-bot
+if [ "${1:-}" != "" ]; then BOT_DIR="$1"; fi
 BOT_DIR="${BOT_DIR:-clanwar-bot}"
 
 echo "Starting bot in '$BOT_DIR'..."

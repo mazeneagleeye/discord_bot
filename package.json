@@ -2,7 +2,15 @@
   "name": "discord-bots-monorepo",
   "private": true,
   "scripts": {
-    "start": "bash ./start.sh"
+    "start": "bash ./start.sh",
+    "start:clanwar-bot": "BOT_DIR=clanwar-bot bash ./start.sh",
+    "start:cpf-bot": "BOT_DIR=cpf-bot bash ./start.sh",
+    "start:discord-ai-bot": "BOT_DIR=discord-ai-bot bash ./start.sh",
+    "start:discord-meme-bot": "BOT_DIR=discord-meme-bot bash ./start.sh",
+    "start:new-generate": "BOT_DIR=\"new generate\" bash ./start.sh",
+    "start:playerprofile": "BOT_DIR=playerprofile bash ./start.sh",
+    "start:all": "concurrently \"npm: start:clanwar-bot\" \"npm: start:cpf-bot\" \"npm: start:discord-ai-bot\" \"npm: start:discord-meme-bot\" \"npm: start:new-generate\" \"npm: start:playerprofile\""
   },
-  "engines": { "node": "18.x" }
+  "engines": { "node": "18.x" },
+  "dependencies": { "concurrently": "^8.2.0" }
 }
