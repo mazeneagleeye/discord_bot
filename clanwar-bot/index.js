@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
 
+// Load environment from .env (if present) — useful for local testing and consistent with other bots
+require('dotenv').config();
+
 // Load token from config.json if present, otherwise fall back to environment variables (Railway uses env vars)
 let token;
 try {
@@ -46,7 +49,10 @@ if (!token) {
   process.exit(1);
 }
 
-client.login(token);
+client.login(token).catch(err => {
+  console.error('❌ Login failed for clanwar-bot:', err && err.message ? err.message : err);
+  process.exit(1);
+});
 
 // --- Lightweight health server for PaaS (Railway) ---
 const http = require('http');
