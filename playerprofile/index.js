@@ -36,7 +36,10 @@ if (!DISCORD_TOKEN) {
   process.exit(1);
 }
 
-client.login(DISCORD_TOKEN);
+client.login(DISCORD_TOKEN).catch(err => {
+  console.error('❌ Login failed for playerprofile:', err && err.message ? err.message : err);
+  process.exit(1);
+});
 
 // health server
 const http = require('http');
