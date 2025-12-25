@@ -100,7 +100,7 @@ try {
   const hasClientId = !!process.env.CLIENT_ID;
   const masked = hasToken ? (`***${String(process.env.TOKEN).slice(-6)}`) : 'NONE';
   console.log('env: TOKEN present?', hasToken, 'masked_suffix:', masked, 'CLIENT_ID present?', hasClientId);
-  console.log('Loaded command files count:', commandFiles.length);
+  console.log('Loaded command files count:', client.commands.size);
 } catch (e) {
   console.warn('Could not print env diagnostics:', e);
 }
