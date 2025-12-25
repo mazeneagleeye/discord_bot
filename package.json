@@ -9,7 +9,9 @@
     "start:discord-meme-bot": "cross-env PORT=8083 BOT_DIR=discord-meme-bot node ./start.js",
     "start:new-generate": "cross-env PORT=8084 BOT_DIR=\"new generate\" node ./start.js",
     "start:playerprofile": "cross-env PORT=8085 BOT_DIR=playerprofile node ./start.js",
-    "start:all": "concurrently \"npm run start:clanwar-bot\" \"npm run start:cpf-bot\" \"npm run start:discord-ai-bot\" \"npm run start:discord-meme-bot\" \"npm run start:new-generate\" \"npm run start:playerprofile\""
+    "start:all": "concurrently \"npm run start:clanwar-bot\" \"npm run start:cpf-bot\" \"npm run start:discord-ai-bot\" \"npm run start:discord-meme-bot\" \"npm run start:new-generate\" \"npm run start:playerprofile\"",
+    "check-env": "node ./scripts/check-env.js",
+    "smoke-test": "node ./scripts/smoke-test.js"
   },
   "engines": { "node": "18.x" },
   "dependencies": { "concurrently": "^8.2.0", "cross-env": "^7.0.3" }
