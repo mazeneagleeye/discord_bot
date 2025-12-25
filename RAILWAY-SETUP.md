@@ -18,6 +18,7 @@ Running all bots in one Railway service (single-service approach)
 - Set the service Start Command to: `npm run start:all`
 - Make sure the service type is **Web** so Railway exposes the container and runs health checks.
 - Ensure the repo root dependencies are installed during the build (so `concurrently` is present); set the Build command to `npm install` or let Railway run the default install step.
+- `start.sh` now **skips `npm install`** at container start when `node_modules` already exists (to avoid repeated installs). If you need to force a reinstall at startup, set the env var `FORCE_INSTALL=1` in Railway service variables.
 - Note: in single-service mode, all bots run in the same container and share logs and resources. If you prefer isolation or easier scaling, create one Railway service per bot instead.
 
 - Each bot still reads `DISCORD_TOKEN`, `OPENAI_API_KEY`, etc., from Railway environment variables as listed below.

@@ -2,15 +2,15 @@
   "name": "discord-bots-monorepo",
   "private": true,
   "scripts": {
-    "start": "bash ./start.sh",
-    "start:clanwar-bot": "PORT=8080 BOT_DIR=clanwar-bot bash ./start.sh",
-    "start:cpf-bot": "PORT=8081 BOT_DIR=cpf-bot bash ./start.sh",
-    "start:discord-ai-bot": "PORT=8082 BOT_DIR=discord-ai-bot bash ./start.sh",
-    "start:discord-meme-bot": "PORT=8083 BOT_DIR=discord-meme-bot bash ./start.sh",
-    "start:new-generate": "PORT=8084 BOT_DIR=\"new generate\" bash ./start.sh",
-    "start:playerprofile": "PORT=8085 BOT_DIR=playerprofile bash ./start.sh",
+    "start": "node ./start.js",
+    "start:clanwar-bot": "cross-env PORT=8080 BOT_DIR=clanwar-bot node ./start.js",
+    "start:cpf-bot": "cross-env PORT=8081 BOT_DIR=cpf-bot node ./start.js",
+    "start:discord-ai-bot": "cross-env PORT=8082 BOT_DIR=discord-ai-bot node ./start.js",
+    "start:discord-meme-bot": "cross-env PORT=8083 BOT_DIR=discord-meme-bot node ./start.js",
+    "start:new-generate": "cross-env PORT=8084 BOT_DIR=\"new generate\" node ./start.js",
+    "start:playerprofile": "cross-env PORT=8085 BOT_DIR=playerprofile node ./start.js",
     "start:all": "concurrently \"npm: start:clanwar-bot\" \"npm: start:cpf-bot\" \"npm: start:discord-ai-bot\" \"npm: start:discord-meme-bot\" \"npm: start:new-generate\" \"npm: start:playerprofile\""
   },
   "engines": { "node": "18.x" },
-  "dependencies": { "concurrently": "^8.2.0" }
+  "dependencies": { "concurrently": "^8.2.0", "cross-env": "^7.0.3" }
 }

@@ -25,8 +25,14 @@ A short guide to run and deploy the bots in this repository on Railway (single-s
 
 Notes:
 - `start.sh` accepts an optional folder argument: `bash ./start.sh cpf-bot`.
-- Root package scripts set `PORT` env vars for each bot to avoid port collisions when running `start:all`.
+- Root package scripts set `PORT` env vars for each bot to avoid port collisions when running `start:all`.- `start.sh` skips `npm install` at container start when `node_modules` exists (to avoid repeated installs). Use `FORCE_INSTALL=1` to force install on startup.
 
+Quick local test checklist:
+- Install deps once in repo root: `npm install`
+- Start a single bot and confirm it skips install on restart:
+  - `npm run start:cpf-bot` (should show "Skipping install — node_modules already present" if modules exist)
+- Force reinstall when needed:
+  - `FORCE_INSTALL=1 npm run start:cpf-bot` (or set `FORCE_INSTALL` in Railway variables)
 ---
 
 ## Railway — Single-service (run all bots)
